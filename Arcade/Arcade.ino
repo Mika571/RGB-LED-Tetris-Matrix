@@ -219,9 +219,9 @@ void checkLeft()  {
 }
 
 //modified deleted && gamerunning
-void checkRight() {  
-  time= millis();
-  delay(1);
+void checkRight() {
+	time= millis();
+	delay(1);
   if (digitalRead(rightArrow)==HIGH && time-lastButtonPressTime>110 && disableMove==false && gameRunning==true) {
     move(4);
     lastButtonPressTime=millis();
@@ -239,34 +239,34 @@ void checkAButton() {
 }
 
 void checkBButton() {  
-  time= millis();
-  delay(1);
-  if (digitalRead(rightArrow)==HIGH && time-lastButtonPressTime>110 && bPlayTetris == false) {
-	bPlayTetris = true;
-    lastButtonPressTime=millis();
-  }
-  if(digitalRead(rightArrow)==HIGH && time-lastButtonPressTime>110 && gameRunning==false)
-  {
-	Serial.println("restart");
-	for (int i=0;i<cols;i++) {
-    for (int j=0; j<rows; j++) currentMatrix[j][i]=0;
+	time= millis();
+	delay(1);
+	if (digitalRead(rightArrow)==HIGH && time-lastButtonPressTime>110 && bPlayTetris == false) {
+		bPlayTetris = true;
+		lastButtonPressTime=millis();
 	}
- 
-	numberOfLinesCleared=0;
-	gameRunning = true;
-	gameOver = false;
-	pieceDropping = false;
-	disableMove = false;
-	fastDrop= false;
-    generatePiece();
+	if(digitalRead(rightArrow)==HIGH && time-lastButtonPressTime>110 && gameRunning==false)
+	{
+		Serial.println("restart");
+		for (int i=0;i<cols;i++) 
+		{
+			for (int j=0; j<rows; j++) currentMatrix[j][i]=0;
+		}
 	
+		numberOfLinesCleared=0;
+		gameRunning = true;
+		gameOver = false;
+		pieceDropping = false;
+		disableMove = false;
+		fastDrop= false;
+		generatePiece();
 	}
 }
 
 // the setup() method runs once, when the sketch starts
 void setup() {
-    // initialize the digital pin as an output.
-    pinMode(ledPin, OUTPUT);
+	// initialize the digital pin as an output.
+	pinMode(ledPin, OUTPUT);
 	pinMode(leftArrow, INPUT_PULLUP);
 	pinMode(rightArrow, INPUT_PULLUP);
 	pinMode(upArrow, INPUT_PULLUP);
@@ -274,7 +274,7 @@ void setup() {
 	pinMode(aButton, INPUT_PULLUP);
 	pinMode(bButton, INPUT_PULLUP);
 	
-    Serial.begin(38400);
+	Serial.begin(38400);
 	attachInterrupt(leftArrow, &checkLeft, RISING);
 	attachInterrupt(rightArrow, &checkRight, RISING);
 	attachInterrupt(upArrow, &checkUp, RISING);
@@ -283,20 +283,20 @@ void setup() {
 	attachInterrupt(bButton, &checkBButton, RISING);
 	
 	
-    matrix.begin();
-    matrix.setBrightness(defaultBrightness);
-
-    matrix.setScrollOffsetFromEdge(defaultScrollOffset);
-
-    matrix.setColorCorrection(cc24);
-    
+	matrix.begin();
+	matrix.setBrightness(defaultBrightness);
+	
+	matrix.setScrollOffsetFromEdge(defaultScrollOffset);
+	
+	matrix.setColorCorrection(cc24);
+	
 	//initialize variables
 	numberOfLinesCleared=0;
 	gameRunning = false;
 	gameOver = false;
 	disableMove = false;
 	fastDrop= false;
-    generatePiece();
+	generatePiece();
 }
 
 //  used in the main loop to calculate the time interval between moves
@@ -316,43 +316,38 @@ int bmoIndex = 1;
 	
 void drawBMO()
 {
-	
 	rgb24 *buffer = matrix.backBuffer();
-		if(millis() - currentMillis > transitionTime)
+	if(millis() - currentMillis > transitionTime)
+	{
+		if(bmoIndex==1)
 		{
-			if(bmoIndex==1)
+			for (int i = 0; i < 32 * 32; i++) 
 			{
-			
-				for (int i = 0; i < 32 * 32; i++) {
 				buffer[i].red = bmo.Bitmap[i * 3 + 0];
 				buffer[i].green = bmo.Bitmap[i * 3 + 1];
 				buffer[i].blue = bmo.Bitmap[i * 3 + 2];
-				}
-			
+			}
+				
 			matrix.swapBuffers(false);
 			bmoIndex = 2;
 			currentMillis = millis();
-			}
-		
 		}
+	}
 		
-		if(millis() - currentMillis > transitionTime)
+	if(millis() - currentMillis > transitionTime)
+	{
+		if(bmoIndex==2)
 		{
-			if(bmoIndex==2)
-			{
-			
-				for (int i = 0; i < 32 * 32; i++) {
-				buffer[i].red = bmo2.Bitmap[i * 3 + 0];
-				buffer[i].green = bmo2.Bitmap[i * 3 + 1];
-				buffer[i].blue = bmo2.Bitmap[i * 3 + 2];
-				}
-			
-			matrix.swapBuffers(false);
-			bmoIndex = 1;
-			currentMillis = millis();
-			}
-		
+			for (int i = 0; i < 32 * 32; i++) {
+			buffer[i].red = bmo2.Bitmap[i * 3 + 0];
+			buffer[i].green = bmo2.Bitmap[i * 3 + 1];
+			buffer[i].blue = bmo2.Bitmap[i * 3 + 2];
 		}
+			
+		matrix.swapBuffers(false);
+		bmoIndex = 1;
+		currentMillis = millis();
+	}
 }
 
 void scrollText(){
@@ -395,7 +390,6 @@ delay(1000);
 	{
 		drawBMO();
 	}
-	//This seems to be the longest string (literal) for the function
 	matrix.scrollText("It has the latest in flashing light technology!!", 1);
 	while(matrix.isScrollingText())
 	{
@@ -408,11 +402,12 @@ delay(1000);
 	}
 	matrix.scrollText("(GASP)",1);
 	
-	for (int i = 0; i < 32 * 32; i++) {
-				buffer[i].red = bmo2.Bitmap[i * 3 + 0];
-				buffer[i].green = bmo2.Bitmap[i * 3 + 1];
-				buffer[i].blue = bmo2.Bitmap[i * 3 + 2];
-			}
+	for (int i = 0; i < 32 * 32; i++) 
+	{
+		buffer[i].red = bmo2.Bitmap[i * 3 + 0];
+		buffer[i].green = bmo2.Bitmap[i * 3 + 1];
+		buffer[i].blue = bmo2.Bitmap[i * 3 + 2];
+	}
 			
 	matrix.swapBuffers(true);
 	while(matrix.isScrollingText())
@@ -426,12 +421,6 @@ delay(1000);
 	}
 	matrix.fillScreen(black);
 	bscrollText = false;
-	
-	
-	
-	//Fun fact: if bPlayTetris isnt declared as volatile then the compiler 
-	//ASSUMES that this value will never change as the loop is empty.
-	//Making it volatile forces it to be checked every time.
 	
 	//Make pretty changing text colour
 	unsigned int rgbColour[3];
